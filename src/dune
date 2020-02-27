@@ -1,0 +1,3 @@
+(library
+ (name brands)
+ (public_name brands))
