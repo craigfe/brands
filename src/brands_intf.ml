@@ -114,7 +114,7 @@ module type Brands = sig
 
   (** The interfaces of branded types of arities from 1 to 8. *)
 
-  module type S1 = sig
+  module type BRANDED = sig
     type 'a t
 
     type br
@@ -124,7 +124,9 @@ module type Brands = sig
     val prj : ('a, br) app -> 'a t
   end
 
-  module type S2 = sig
+  module type BRANDED_1 = BRANDED
+
+  module type BRANDED_2 = sig
     type ('a, 'b) t
 
     type br
@@ -134,7 +136,7 @@ module type Brands = sig
     val prj : ('a, 'b, br) app2 -> ('a, 'b) t
   end
 
-  module type S3 = sig
+  module type BRANDED_3 = sig
     type ('a, 'b, 'c) t
 
     type br
@@ -144,7 +146,7 @@ module type Brands = sig
     val prj : ('a, 'b, 'c, br) app3 -> ('a, 'b, 'c) t
   end
 
-  module type S4 = sig
+  module type BRANDED_4 = sig
     type ('a, 'b, 'c, 'd) t
 
     type br
@@ -154,7 +156,7 @@ module type Brands = sig
     val prj : ('a, 'b, 'c, 'd, br) app4 -> ('a, 'b, 'c, 'd) t
   end
 
-  module type S5 = sig
+  module type BRANDED_5 = sig
     type ('a, 'b, 'c, 'd, 'e) t
 
     type br
@@ -164,7 +166,7 @@ module type Brands = sig
     val prj : ('a, 'b, 'c, 'd, 'e, br) app5 -> ('a, 'b, 'c, 'd, 'e) t
   end
 
-  module type S6 = sig
+  module type BRANDED_6 = sig
     type ('a, 'b, 'c, 'd, 'e, 'f) t
 
     type br
@@ -174,7 +176,7 @@ module type Brands = sig
     val prj : ('a, 'b, 'c, 'd, 'e, 'f, br) app6 -> ('a, 'b, 'c, 'd, 'e, 'f) t
   end
 
-  module type S7 = sig
+  module type BRANDED_7 = sig
     type ('a, 'b, 'c, 'd, 'e, 'f, 'g) t
 
     type br
@@ -186,7 +188,7 @@ module type Brands = sig
       ('a, 'b, 'c, 'd, 'e, 'f, 'g, br) app7 -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) t
   end
 
-  module type S8 = sig
+  module type BRANDED_8 = sig
     type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t
 
     type br
@@ -205,58 +207,63 @@ module type Brands = sig
       Brands for types defined in the OCaml standard library. *)
 
   module Branded : sig
-    module Array : S1 with type 'a t := 'a Stdlib.Array.t
+    module Array : BRANDED_1 with type 'a t := 'a Stdlib.Array.t
 
-    module ArrayLabels : S1 with type 'a t := 'a Stdlib.ArrayLabels.t
+    module ArrayLabels : BRANDED_1 with type 'a t := 'a Stdlib.ArrayLabels.t
 
-    module Hashtbl : S2 with type ('a, 'b) t := ('a, 'b) Stdlib.Hashtbl.t
+    module Hashtbl : BRANDED_2 with type ('a, 'b) t := ('a, 'b) Stdlib.Hashtbl.t
 
-    module Lazy : S1 with type 'a t := 'a Stdlib.Lazy.t
+    module Lazy : BRANDED_1 with type 'a t := 'a Stdlib.Lazy.t
 
-    module List : S1 with type 'a t := 'a Stdlib.List.t
+    module List : BRANDED_1 with type 'a t := 'a Stdlib.List.t
 
-    module ListLabels : S1 with type 'a t := 'a Stdlib.ListLabels.t
+    module ListLabels : BRANDED_1 with type 'a t := 'a Stdlib.ListLabels.t
 
-    module Option : S1 with type 'a t := 'a Stdlib.Option.t
+    module Option : BRANDED_1 with type 'a t := 'a Stdlib.Option.t
 
-    module Queue : S1 with type 'a t := 'a Stdlib.Queue.t
+    module Queue : BRANDED_1 with type 'a t := 'a Stdlib.Queue.t
 
-    module Result : S2 with type ('a, 'b) t := ('a, 'b) Stdlib.Result.t
+    module Result : BRANDED_2 with type ('a, 'b) t := ('a, 'b) Stdlib.Result.t
 
-    module Seq : S1 with type 'a t := 'a Stdlib.Seq.t
+    module Seq : BRANDED_1 with type 'a t := 'a Stdlib.Seq.t
 
-    module Stack : S1 with type 'a t := 'a Stdlib.Stack.t
+    module Stack : BRANDED_1 with type 'a t := 'a Stdlib.Stack.t
 
-    module Stream : S1 with type 'a t := 'a Stdlib.Stream.t
+    module Stream : BRANDED_1 with type 'a t := 'a Stdlib.Stream.t
 
-    module Weak : S1 with type 'a t := 'a Stdlib.Weak.t
+    module Weak : BRANDED_1 with type 'a t := 'a Stdlib.Weak.t
   end
 
   (** {2 Constructing brands} *)
 
-  module Make_brand1 (X : T1) () : S1 with type 'a t := 'a X.t
+  module Make_brand (X : T1) () : BRANDED with type 'a t := 'a X.t
 
-  module Make_brand2 (X : T2) () : S2 with type ('a, 'b) t := ('a, 'b) X.t
+  (** Alias of {!Make_brand} *)
+  module Make_brand_1 (X : T1) () : BRANDED_1 with type 'a t := 'a X.t
 
-  module Make_brand3 (X : T3) () :
-    S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) X.t
+  module Make_brand_2 (X : T2) () :
+    BRANDED_2 with type ('a, 'b) t := ('a, 'b) X.t
 
-  module Make_brand4 (X : T4) () :
-    S4 with type ('a, 'b, 'c, 'd) t := ('a, 'b, 'c, 'd) X.t
+  module Make_brand_3 (X : T3) () :
+    BRANDED_3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) X.t
 
-  module Make_brand5 (X : T5) () :
-    S5 with type ('a, 'b, 'c, 'd, 'e) t := ('a, 'b, 'c, 'd, 'e) X.t
+  module Make_brand_4 (X : T4) () :
+    BRANDED_4 with type ('a, 'b, 'c, 'd) t := ('a, 'b, 'c, 'd) X.t
 
-  module Make_brand6 (X : T6) () :
-    S6 with type ('a, 'b, 'c, 'd, 'e, 'f) t := ('a, 'b, 'c, 'd, 'e, 'f) X.t
+  module Make_brand_5 (X : T5) () :
+    BRANDED_5 with type ('a, 'b, 'c, 'd, 'e) t := ('a, 'b, 'c, 'd, 'e) X.t
 
-  module Make_brand7 (X : T7) () :
-    S7
+  module Make_brand_6 (X : T6) () :
+    BRANDED_6
+      with type ('a, 'b, 'c, 'd, 'e, 'f) t := ('a, 'b, 'c, 'd, 'e, 'f) X.t
+
+  module Make_brand_7 (X : T7) () :
+    BRANDED_7
       with type ('a, 'b, 'c, 'd, 'e, 'f, 'g) t :=
             ('a, 'b, 'c, 'd, 'e, 'f, 'g) X.t
 
-  module Make_brand8 (X : T8) () :
-    S8
+  module Make_brand_8 (X : T8) () :
+    BRANDED_8
       with type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t :=
             ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) X.t
 end
