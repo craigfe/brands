@@ -198,11 +198,13 @@ module type Brands = sig
     type ('a, 'fn) t = ('a, 'fn) app
   end)
 
-  (** {2 [Stdlib] brands}
-
-      Brands for types defined in the OCaml standard library. *)
+  (** {2 Pre-provided branded types} *)
 
   module Branded : sig
+    module Id : S1 with type 'a t := 'a
+
+    (** Brands for types defined in the OCaml standard library. *)
+
     module Array : S1 with type 'a t := 'a Stdlib.Array.t
     module ArrayLabels : S1 with type 'a t := 'a Stdlib.ArrayLabels.t
     module Hashtbl : S2 with type ('a, 'b) t := ('a, 'b) Stdlib.Hashtbl.t

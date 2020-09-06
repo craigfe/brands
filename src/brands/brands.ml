@@ -113,6 +113,10 @@ end
 (* Standard library brands *)
 
 module Branded = struct
+  module Id = Make1 (struct
+    type 'a t = 'a
+  end)
+
   module Array = Make1 (Stdlib.Array)
   module ArrayLabels = Make1 (Stdlib.ArrayLabels)
   module Hashtbl = Make2 (Stdlib.Hashtbl)
