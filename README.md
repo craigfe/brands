@@ -39,10 +39,6 @@ by Jeremy Yallop and Leo White [[Yal14][yal14]]. This implementation is similar
 to the one that accompanies the paper ([`ocamllabs/higher`][ocamllabs/higher]),
 but differs in several regards:
 
-- Conversions between branded forms and pure forms are implemented using
-  extensible variant types rather than a type coercion. (Extensible types were
-  not available in OCaml at the time of publication of the paper.)
-
 - Constructed brands are named `br` rather than `t`, to ease inclusion into
   existing modules.
 

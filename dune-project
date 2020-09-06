@@ -1,6 +1,5 @@
 (lang dune 2.0)
 (name brands)
-(implicit_transitive_deps false)
 
 (generate_opam_files true)
 (source (github CraigFe/brands))
@@ -10,7 +9,11 @@
 (package
  (name brands)
  (synopsis "An implementation of defunctionalised higher-kinded types in OCaml.")
- (description "\
-An implementation of defunctionalised higher-kinded types in OCaml.
-")
  (documentation https://CraigFe.github.io/kind/))
+
+(package
+ (name ppx_brands)
+ (synopsis "Derive type brands for higher-kinded polymorphism")
+ (documentation https://CraigFe.github.io/sink/)
+ (depends
+  (ppxlib (>= 0.15.0))))
