@@ -9,7 +9,7 @@ let expand_type_decl ~loc ~path:_ (_recflag, tdecls) =
   let newtype_suffix = List.length params |> string_of_int in
   include_infos
     (pmod_apply
-       (pmod_ident (Located.lident ("Brands.Make" ^ newtype_suffix)))
+       (pmod_ident (Located.lident ("Brands.Branded.Make" ^ newtype_suffix)))
        (pmod_structure
           [
             pstr_type Nonrecursive

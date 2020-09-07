@@ -50,14 +50,10 @@ module type T8 = sig
   type (_, _, _, _, _, _, _, _) t
 end
 
-module Make_interfaces (App : sig
+module Make_aliases (App : sig
   type ('a, 'f) t
 end) =
 struct
-  (** {1 Branded types} *)
-
-  (** {1:curried Curried syntax} *)
-
   type ('b, 'a, 'fn) app2 = ('b, ('a, 'fn) App.t) App.t
   type ('c, 'b, 'a, 'fn) app3 = ('c, ('b, 'a, 'fn) app2) App.t
   type ('d, 'c, 'b, 'a, 'fn) app4 = ('d, ('c, 'b, 'a, 'fn) app3) App.t
@@ -71,22 +67,38 @@ struct
 
   type ('h, 'g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app8 =
     ('h, ('g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app7) App.t
+end
+
+module Make_interfaces (T : sig
+  type ('a, 'f) app
+  type ('b, 'a, 'fn) app2
+  type ('c, 'b, 'a, 'fn) app3
+  type ('d, 'c, 'b, 'a, 'fn) app4
+  type ('e, 'd, 'c, 'b, 'a, 'fn) app5
+  type ('f, 'e, 'd, 'c, 'b, 'a, 'fn) app6
+  type ('g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app7
+  type ('h, 'g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app8
+end) =
+struct
+  open T
+
+  (** {1 Branded types} *)
 
   (** The interfaces of branded types of arities from 1 to 8. *)
   module type S0 = sig
     type t
     type br
 
-    val inj : t -> (_, br) App.t
-    val prj : (_, br) App.t -> t
+    val inj : t -> (_, br) app
+    val prj : (_, br) app -> t
   end
 
   module type S1 = sig
     type 'a t
     type br
 
-    val inj : 'a t -> ('a, br) App.t
-    val prj : ('a, br) App.t -> 'a t
+    val inj : 'a t -> ('a, br) app
+    val prj : ('a, br) app -> 'a t
   end
 
   module type S2 = sig
@@ -193,14 +205,63 @@ module type Brands = sig
       for the types defined in {{:https://github.com/janestreet/base}
       [janestreet/base]}. *)
 
+  (** {1:curried Curried syntax} *)
+
   (** @inline *)
-  include module type of Make_interfaces (struct
+  include module type of Make_aliases (struct
     type ('a, 'fn) t = ('a, 'fn) app
   end)
 
-  (** {2 Pre-provided branded types} *)
+  (** @inline *)
 
   module Branded : sig
+    include module type of Make_interfaces (struct
+      type nonrec ('a, 'fn) app = ('a, 'fn) app
+      type nonrec ('b, 'a, 'fn) app2 = ('b, 'a, 'fn) app2
+      type nonrec ('c, 'b, 'a, 'fn) app3 = ('c, 'b, 'a, 'fn) app3
+      type nonrec ('d, 'c, 'b, 'a, 'fn) app4 = ('d, 'c, 'b, 'a, 'fn) app4
+
+      type nonrec ('e, 'd, 'c, 'b, 'a, 'fn) app5 =
+        ('e, 'd, 'c, 'b, 'a, 'fn) app5
+
+      type nonrec ('f, 'e, 'd, 'c, 'b, 'a, 'fn) app6 =
+        ('f, 'e, 'd, 'c, 'b, 'a, 'fn) app6
+
+      type nonrec ('g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app7 =
+        ('g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app7
+
+      type nonrec ('h, 'g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app8 =
+        ('h, 'g, 'f, 'e, 'd, 'c, 'b, 'a, 'fn) app8
+    end)
+
+    (** {2 Constructing brands} *)
+
+    module Make0 (X : T0) : S0 with type t := X.t
+    module Make1 (X : T1) : S1 with type 'a t := 'a X.t
+    module Make2 (X : T2) : S2 with type ('a, 'b) t := ('a, 'b) X.t
+    module Make3 (X : T3) : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) X.t
+
+    module Make4 (X : T4) :
+      S4 with type ('a, 'b, 'c, 'd) t := ('a, 'b, 'c, 'd) X.t
+
+    module Make5 (X : T5) :
+      S5 with type ('a, 'b, 'c, 'd, 'e) t := ('a, 'b, 'c, 'd, 'e) X.t
+
+    module Make6 (X : T6) :
+      S6 with type ('a, 'b, 'c, 'd, 'e, 'f) t := ('a, 'b, 'c, 'd, 'e, 'f) X.t
+
+    module Make7 (X : T7) :
+      S7
+        with type ('a, 'b, 'c, 'd, 'e, 'f, 'g) t :=
+              ('a, 'b, 'c, 'd, 'e, 'f, 'g) X.t
+
+    module Make8 (X : T8) :
+      S8
+        with type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t :=
+              ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) X.t
+
+    (** {2 Pre-provided branded types} *)
+
     module Id : S1 with type 'a t := 'a
 
     (** Brands for types defined in the OCaml standard library. *)
@@ -219,30 +280,4 @@ module type Brands = sig
     module Stream : S1 with type 'a t := 'a Stdlib.Stream.t
     module Weak : S1 with type 'a t := 'a Stdlib.Weak.t
   end
-
-  (** {2 Constructing brands} *)
-
-  module Make0 (X : T0) : S0 with type t := X.t
-  module Make1 (X : T1) : S1 with type 'a t := 'a X.t
-  module Make2 (X : T2) : S2 with type ('a, 'b) t := ('a, 'b) X.t
-  module Make3 (X : T3) : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) X.t
-
-  module Make4 (X : T4) :
-    S4 with type ('a, 'b, 'c, 'd) t := ('a, 'b, 'c, 'd) X.t
-
-  module Make5 (X : T5) :
-    S5 with type ('a, 'b, 'c, 'd, 'e) t := ('a, 'b, 'c, 'd, 'e) X.t
-
-  module Make6 (X : T6) :
-    S6 with type ('a, 'b, 'c, 'd, 'e, 'f) t := ('a, 'b, 'c, 'd, 'e, 'f) X.t
-
-  module Make7 (X : T7) :
-    S7
-      with type ('a, 'b, 'c, 'd, 'e, 'f, 'g) t :=
-            ('a, 'b, 'c, 'd, 'e, 'f, 'g) X.t
-
-  module Make8 (X : T8) :
-    S8
-      with type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t :=
-            ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) X.t
 end
