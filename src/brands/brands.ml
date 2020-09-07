@@ -33,10 +33,10 @@ module Branded = struct
 
   module Make0 (X : T0) = struct
     type t = X.t
-    type br
+    type br = t
 
-    external inj : t -> (_, br) app = "%identity"
-    external prj : (_, br) app -> t = "%identity"
+    external inj : t -> br = "%identity"
+    external prj : br -> t = "%identity"
   end
 
   module Make1 (X : T1) = struct

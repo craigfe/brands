@@ -87,11 +87,13 @@ struct
   (** The interfaces of branded types of arities from 1 to 8. *)
   module type S0 = sig
     type t
-    type br
+    type br = t
 
-    val inj : t -> (_, br) app
-    val prj : (_, br) app -> t
+    val inj : t -> br
+    val prj : br -> t
   end
+
+  module type S = S0
 
   module type S1 = sig
     type 'a t
