@@ -28,4 +28,4 @@ let expand_type_decl ~loc ~path:_ (_recflag, tdecls) =
 
 let brand : Deriving.t =
   let open Deriving in
-  add ~str_type_decl:(Generator.make Args.empty expand_type_decl) "brand"
+  add ~str_type_decl:(Generator.make Args.empty expand_type_decl) "branded"
