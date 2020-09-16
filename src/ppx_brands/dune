@@ -1,13 +1,5 @@
 (library
- (name ppx_brands_deriver)
- (public_name ppx_brands.deriver)
- (modules ppx_brands_deriver)
+ (name ppx_brands)
+ (public_name ppx_brands)
  (kind ppx_deriver)
- (libraries ppxlib))
-
-(library
- (name ppx_brands_rewriter)
- (public_name ppx_brands.rewriter)
- (modules ppx_brands_rewriter)
- (kind ppx_rewriter)
  (libraries ppxlib))
