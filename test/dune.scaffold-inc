@@ -1,0 +1,8 @@
+(rule
+ (targets pp.ml)
+ (action (with-stdout-to pp.ml (echo "Ppxlib.Driver.standalone ()"))))
+
+(executable
+ (name pp)
+ (modules pp)
+ (libraries ppxlib ppx_brands))

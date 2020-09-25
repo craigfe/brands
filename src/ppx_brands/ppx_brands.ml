@@ -79,4 +79,4 @@ let () =
   Reserved_namespaces.reserve "brands";
   Reserved_namespaces.reserve "branded";
   Driver.register_transformation ~extensions:[ extension ] "brands.b";
-  Deriving.add ~str_type_decl "brands.branded" |> Deriving.ignore
+  Deriving.add ~str_type_decl "branded" |> Deriving.ignore

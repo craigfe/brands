@@ -1,0 +1,9 @@
+type t [@@deriving branded]
+
+include struct
+  let _ = fun (_ : t) -> ()
+
+  include Brands.Branded.Make0 (struct
+    type nonrec t = t
+  end)
+end [@@ocaml.doc "@inline"] [@@merlin.hide]

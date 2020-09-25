@@ -8,10 +8,11 @@ homepage: "https://github.com/CraigFe/brands"
 doc: "https://CraigFe.github.io/kind/"
 bug-reports: "https://github.com/CraigFe/brands/issues"
 depends: [
-  "dune" {>= "2.0"}
+  "dune" {>= "2.7"}
+  "odoc" {with-doc}
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"

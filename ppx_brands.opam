@@ -7,11 +7,14 @@ homepage: "https://github.com/CraigFe/brands"
 doc: "https://CraigFe.github.io/sink/"
 bug-reports: "https://github.com/CraigFe/brands/issues"
 depends: [
-  "dune" {>= "2.0"}
+  "dune" {>= "2.7"}
   "ppxlib" {>= "0.15.0"}
+  "scaffold" {with-test}
+  "ocamlformat" {= "0.15.0" & with-test}
+  "odoc" {with-doc}
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"
@@ -25,3 +28,6 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/CraigFe/brands.git"
+pin-depends: [
+  "scaffold.dev" "git+https://github.com/CraigFe/scaffold#000d9297958ead08cc4640c8355e341cb50c5f2a"
+]

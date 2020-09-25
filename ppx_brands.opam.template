@@ -1,0 +1,3 @@
+pin-depends: [
+  "scaffold.dev" "git+https://github.com/CraigFe/scaffold#000d9297958ead08cc4640c8355e341cb50c5f2a"
+]

@@ -1,4 +1,4 @@
-(lang dune 2.0)
+(lang dune 2.7)
 (name brands)
 
 (generate_opam_files true)
@@ -16,4 +16,6 @@
  (synopsis "Derive type brands for higher-kinded polymorphism")
  (documentation https://CraigFe.github.io/sink/)
  (depends
-  (ppxlib (>= 0.15.0))))
+  (ppxlib (>= 0.15.0))
+  (scaffold :with-test)
+  (ocamlformat (and (= 0.15.0) :with-test))))
