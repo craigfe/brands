@@ -1,9 +1,83 @@
-type t [@@deriving branded]
+module T : sig
+  type t0 [@@deriving branded]
 
-include struct
-  let _ = fun (_ : t) -> ()
+  include sig
+    [@@@ocaml.warning "-32"]
 
-  include Brands.Branded.Make0 (struct
-    type nonrec t = t
-  end)
-end [@@ocaml.doc "@inline"] [@@merlin.hide]
+    include Brands.Branded.S0 with type t := t0
+  end
+  [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type _ t1 [@@deriving branded]
+
+  include sig
+    [@@@ocaml.warning "-32"]
+
+    include Brands.Branded.S1 with type 'v_x__007_ t := 'v_x__007_ t1
+  end
+  [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type (_, _) t2 [@@deriving branded]
+
+  include sig
+    [@@@ocaml.warning "-32"]
+
+    include
+      Brands.Branded.S2
+        with type ('v_x__008_, 'v_x__009_) t := ('v_x__008_, 'v_x__009_) t2
+  end
+  [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type (_, _, _) t3 [@@deriving branded]
+
+  include sig
+    [@@@ocaml.warning "-32"]
+
+    include
+      Brands.Branded.S3
+        with type ('v_x__010_, 'v_x__011_, 'v_x__012_) t :=
+              ('v_x__010_, 'v_x__011_, 'v_x__012_) t3
+  end
+  [@@ocaml.doc "@inline"] [@@merlin.hide]
+end = struct
+  type t0 [@@deriving branded]
+
+  include struct
+    let _ = fun (_ : t0) -> ()
+
+    include Brands.Branded.Make0 (struct
+      type nonrec t = t0
+    end)
+  end [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type _ t1 [@@deriving branded]
+
+  include struct
+    let _ = fun (_ : _ t1) -> ()
+
+    include Brands.Branded.Make1 (struct
+      type nonrec 'v_x__001_ t = 'v_x__001_ t1
+    end)
+  end [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type (_, _) t2 [@@deriving branded]
+
+  include struct
+    let _ = fun (_ : (_, _) t2) -> ()
+
+    include Brands.Branded.Make2 (struct
+      type nonrec ('v_x__002_, 'v_x__003_) t = ('v_x__002_, 'v_x__003_) t2
+    end)
+  end [@@ocaml.doc "@inline"] [@@merlin.hide]
+
+  type (_, _, _) t3 [@@deriving branded]
+
+  include struct
+    let _ = fun (_ : (_, _, _) t3) -> ()
+
+    include Brands.Branded.Make3 (struct
+      type nonrec ('v_x__004_, 'v_x__005_, 'v_x__006_) t =
+        ('v_x__004_, 'v_x__005_, 'v_x__006_) t3
+    end)
+  end [@@ocaml.doc "@inline"] [@@merlin.hide]
+end
